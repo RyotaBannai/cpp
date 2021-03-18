@@ -11,7 +11,7 @@ static void print()
   }
 }
 
-static int count_x(char *p, char x)
+static int count_x(const char *p, char x)
 /*
   string p の中に出現する文字 x をカウントしてその数を返す
 */
@@ -29,6 +29,7 @@ static int count_x(char *p, char x)
 int main()
 {
   print();
-  cout << "the result of count_x is: " << count_x("abcda", 'a') << endl;
+  char const *my_string = "abcda";
+  cout << "the result of count_x is: " << count_x(my_string, 'a') << endl;
   return 0;
 }
