@@ -4,7 +4,7 @@
 using namespace std;
 
 /*
-` compile as the way C does.
+  compile as the way C does.
   $ clang++ -std=c++11 -stdlib=libc++ -Weverything user.cpp Vector.cpp Vector.h
 */
 
