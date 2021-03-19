@@ -1,11 +1,12 @@
 #include <iostream>
-#include "Vector.h"
+#include "Vector.hpp"
 
 using namespace std;
 
 /*
   compile as the way C does.
-  $ clang++ -std=c++11 -stdlib=libc++ -Weverything user.cpp Vector.cpp Vector.h
+  $ clang++ -std=c++11 -stdlib=libc++ -Weverything user.cpp Vector.cpp Vector.hpp # or
+  $ g++ -std=c++11 user.cpp Vector.cpp Vector.hpp 
 */
 
 static double read_and_sum(int s)
