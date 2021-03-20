@@ -43,3 +43,6 @@
   - 関数オブジェクトを簡潔な内容であれば、ラムダ式（lambda function）を使って全く同じオブジェクトを生成することができる.(`[&](int a) { return a < x; }`)
     - `[&], キャプチャ並び(capture list)`：使っている`局所名（x など）`を参照を介してアクセスすることを表す
     - x だけキャプチャしたい場合 `[&x]`, x のコピーとしてオブジェクとを生成した場合は`[=x]`と記述
+- `conditional_variable`: lock とイベント待ち: 他のスレッドの結果によってなんならかの条件が成立するまで、別のスレッドを待機させる、と言ったことが可能.
+  - 関数の中では、初めに `mutex` を取得し、`conditional_variable.wait(unique_lock<mutex>)` で、`mutex` を解放し wait する。condition が成立したら（待機が終わったら）、再度 `unique_lock<mutex>` を取得し、ロックをかける。
+  - condition が成立したことを通知するには、`conditional_variable.notify_one()` で行う
