@@ -46,3 +46,4 @@
 - `conditional_variable`: lock とイベント待ち: 他のスレッドの結果によってなんならかの条件が成立するまで、別のスレッドを待機させる、と言ったことが可能.
   - 関数の中では、初めに `mutex` を取得し、`conditional_variable.wait(unique_lock<mutex>)` で、`mutex` を解放し wait する。condition が成立したら（待機が終わったら）、再度 `unique_lock<mutex>` を取得し、ロックをかける。
   - condition が成立したことを通知するには、`conditional_variable.notify_one()` で行う
+- `tag dispatch（タグ指定）`: overload, single/multi dispatch を前提とした機能で、iterator pattern をアルゴリズムに適用したもの。タグと呼ばれる、組み込みの機能（例えば、`std::random_access_iterator_tag（for vector）`, `std::forward_iterator_tag（for forward_list）`）を関数の引数として使い、コンパイル時に複数のアルゴリズムのうちから１つ選択することができる機能。このタグを取得するために、`iterator_traits` (この場合は container )などから tag を取得することができる。また、こういった関数（/アルゴリズム: 引数あるいは返却値として、ある型が与えられて、コンパイル時に評価される関数）を`型関数(type function)`と言う。
