@@ -48,3 +48,6 @@
   - condition が成立したことを通知するには、`conditional_variable.notify_one()` で行う
 - `tag dispatch（タグ指定）`: overload, single/multi dispatch を前提とした機能で、iterator pattern をアルゴリズムに適用したもの。タグと呼ばれる、組み込みの機能（例えば、`std::random_access_iterator_tag（for vector）`, `std::forward_iterator_tag（for forward_list）`）を関数の引数として使い、コンパイル時に複数のアルゴリズムのうちから１つ選択することができる機能。このタグを取得するために、`iterator_traits` (この場合は container )などから tag を取得することができる。また、こういった関数（/アルゴリズム: 引数あるいは返却値として、ある型が与えられて、コンパイル時に評価される関数）を`型関数(type function)`と言う。(132)
 - `型述語`：型に関する基本的な情報を返却するための単純な`型関数`である。このような述語（predicate）は、`<type_traits>`で提供される
+- `make_pair()` を使うと、明示的な型の記述が不要になるため pair の作成が容易になる(135)
+- その機能に、理屈通りで容易に実装できる別の方法が複数あれば、その機能は、`定義されない（undefined）`ではなく、`指定されない（unspecified）`あるいは、`処理系定義（implementation defined）`である(144)
+- 標準が指定しない、あるいは、定義しない、とするものを使わないように努力することは、そのための時間と労力に見合うはずである(145)
