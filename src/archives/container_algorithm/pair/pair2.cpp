@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 using namespace std;
-using Bounds = pair<vector<int>::iterator, vector<int>::iterator>;
+using Bounds = pair<vector<int>::iterator, vector<int>::iterator>; // 型別名
 
 bool my_greater(int i, int j) { return i > j; }
 
