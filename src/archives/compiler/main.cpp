@@ -2,7 +2,7 @@
 #include <map>
 #include <string>
 #include <type_traits>
-#include <type_traits>
+#include <cctype> // isalpha() など
 #include <utility>
 
 using namespace std;
