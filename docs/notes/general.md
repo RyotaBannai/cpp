@@ -170,3 +170,4 @@
   - 関数が値を返却するセマンティクス（`return`）は、引数受け渡しの背マンティクスと同様にコピー初期化と同じ。そのため、返却型の変数を初期化し、暗黙裏に型の変換が行われる (`double f() {return 1;} // 1 は double{1}`)(317)
   - コマンドライン引数を処理する場合は、伝統的な C スタイルの手法ではなく、コンテナを使った手法を取り入れる.
   - デフォルト引数を積極的に取り入れることでメンバ関数の記述量を圧倒的に軽減・保守性を高めることができる
+- `One Definition Rule`: objects and non-inline functions cannot have more than one definition in the entire program and template and types cannot have more than one definition by translation unit.[Ref](https://en.wikipedia.org/wiki/One_Definition_Rule)
