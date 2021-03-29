@@ -35,6 +35,7 @@ ostream &operator<<(ostream &strm, Kind k)
 {
   string k_names[] = {"name", "number", "end"};
   auto k_name = underlying_type<Kind>::type(k);
+  // cout << "underlying_type: " << underlying_type<Kind>::type(k) << endl; // doesn't help..
 
   // show type of variable.
   // cout << "typeid is " << typeid(k_name).name() << " " << endl;
