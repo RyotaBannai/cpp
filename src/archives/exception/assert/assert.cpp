@@ -74,6 +74,9 @@ void f(int n)
   Assert::dynamic(true, "no problem");
   Assert::dynamic<Assert::level(2), Assert::Error>((1 <= n && n < max), Assert::compose(__FILE__, __LINE__, "range problem"));
   // 0 とかにすると ignore_
+
+  // namespace なども取り除いた場合の最小限の表現
+  // dynamic(1 <= n && n < max);
 }
 
 int main()
