@@ -209,3 +209,8 @@
     - 資源管理には、`try-except`を使うのではなく、コンストラクタで資源を確保しデストラクタで確実に解放する`資源ハンドル`をすること
     - コンストラクタの途中で問題があった場合、部分オブジェクト(問題発生までに作成されたオブジェクト、完全オブジェクトではない)はデストラクタで確実に解体すること（`作成途中`の状態に置かないこと）
     - `二つ以上の資源`：この場合も、同様な方針でコンストラクタで資源獲得を行い、どちらか一方でも失敗した場合は `throw` するような仕組みで構築すると良い
+- `std::terminate()`: called by the C++ runtime when the program cannot continue for any of the following reasons:
+  - exception が捕捉されない場合 (it is implementation-defined whether any stack unwinding is done in this case)
+  - exception をハンドル中に exception が捕捉されずに抜けてしまった際に、exception ハンドルメカニズムが使う(e.g. a destructor of some local object, or a copy constructor constructing a catch-clause parameter)
+  - a static or thread-local object のコンストラクタやデストラクタが exception を投げたとき
+  - `std::atexit` or `std::at_quick_exit` で登録された関数が exception を投げたとき
