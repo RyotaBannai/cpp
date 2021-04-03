@@ -62,6 +62,18 @@ vector<T, A>::vector(size_type n, const T &val, const A &a) : alloc{a} // alloc 
   //   alloc.deallocate(n);
   //   throw;
   // }
+
+  /* for で解体している部分は std::uninitialized_fill() を使うことで簡潔化できる*/
+  // try
+  // {
+  //   uninitialized_fill(elem, elem + n, val);
+  //   space = last = elem + n;
+  // }
+  // catch (...)
+  // {
+  //   alloc.deallocate(elem, n);
+  //   throw
+  // }
 }
 
 // 上の実装は std::uninitialized_fill() と同等の実装　(386)
