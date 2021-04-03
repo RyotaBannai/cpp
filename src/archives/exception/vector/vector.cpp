@@ -64,6 +64,25 @@ vector<T, A>::vector(size_type n, const T &val, const A &a) : alloc{a} // alloc 
   // }
 }
 
+// 上の実装は std::uninitialized_fill() と同等の実装　(386)
+
+template <typename For, typename T>
+void uninitialized_fill(For beg, For end, const T &x)
+{
+  For p;
+  try
+  {
+    for (p = beg; p != end; ++p)
+      ::new (static_cast<void *>(&*p)) T(x); // *p の中に x のコピーを構築
+  }
+  catch (...)
+  {
+    for (For q = beg; q != p; ++q)
+      (&*q)->~T();
+    throw;
+  }
+}
+
 int main()
 {
   // vector<int> v = vector{1, 3};
