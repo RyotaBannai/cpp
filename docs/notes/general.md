@@ -227,3 +227,16 @@
   - 関数全体を try-catch にするメリット: コンストラクタでメンバの初期化に失敗した場合に、呼び出したところに throw するのではなく catch できる。ただ初期化しようとしたメンバオブジェクトが未構築であれば構築されることはないし、もし構築済みであればスタック巻き戻しの一環でデストラクタによって解体される。結局は最後に再送出することになる
   - 名前空間とスレッド局所変数の構築中あるいは解体中に送出された例外を捕捉する方法は存在しない. このことは広域変数を避けるべき理由のひとつである. (383)
   - あるスレッドが送出した例外を他のスレッドのハンドラに転送する処理は、標準ライブラリ関数 `current_exception()` によって行う
+- `template`:
+  - The difference between `typename` and `class`: in general no difference. typename is clearer to indicate it's type, not object.
+  - [nested template1](https://stackoverflow.com/questions/20373466/nested-c-template-parameters-for-functions)
+  - [nested template2](https://stackoverflow.com/questions/39078287/nested-templates-template-template-parameters)
+
+- `allocator`: explicitly `allocate heap memory`, construct it, destroy it, and then finally deallocate the memory. (If you don't want to do that, don't use an allocator, use new instead.)
+  - `you use an allocator when an allocator is required` (such as when using a container) and you use `std::allocator when you don't want to provide a custom allocator` and just want the standard one. You don't use an allocator as a replacement for `new` and `delete`.
+  - `new` または `malloc` を使用すると、`メモリ管理`は`コンパイラのランタイムの対応する関数に固定`されるが、`アロケーター`が使用される場合、`メモリー管理`は`アロケーターに委任され、アロケーターは交換可能`である。これにより、使用するメモリ管理機能を変更することができる。
+- vector などの初期化した時に確保したメモリをその時点で全て使用するのではなく、将来のどのタイミングかで利用する時などに有効.
+- vector の場合、`reserve` すると初期化の時点で capacity をセットできるため、reallocation が問題であればこちらを使う.
+- vector は保持できるサイズ（`vector::max_size`）を超えると `length_error` を送出する `my_vector.max_size()` で確認する（基本的には膨大な値）
+- [Ref1](https://stackoverflow.com/questions/31358804/whats-the-advantage-of-using-stdallocator-instead-of-new-in-c)
+- [Ref2](https://cloud6.net/so/c%2B%2B/1348832)
