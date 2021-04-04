@@ -1,4 +1,5 @@
 #include "parser_impl.hpp"
+using namespace Lexer;
 
 double Parser::term(bool);
 double Parser::prim(bool);

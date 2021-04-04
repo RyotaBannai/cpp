@@ -3,7 +3,6 @@
 #include "table.hpp"
 
 using Error::error;
-using namespace Lexer;
 using Table::table;
 
 // 実装者用インターフェース

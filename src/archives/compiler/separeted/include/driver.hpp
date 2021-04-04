@@ -1,4 +1,3 @@
-
 namespace Driver
 {
 void calculate();

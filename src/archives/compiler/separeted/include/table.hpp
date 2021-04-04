@@ -1,8 +1,8 @@
 #include <map>
 #include <string>
-using namespace std;
 
 namespace Table
 {
+using namespace std;
 extern map<string, double> table;
 } // namespace Table

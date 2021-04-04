@@ -1,10 +1,10 @@
 #include <iostream>
 #include <string>
 #include "error.hpp"
-using namespace std;
 
 namespace Lexer
 {
+using namespace std;
 enum class Kind : char
 {
   name = '0',
