@@ -1,4 +1,7 @@
-#include "dc.hpp"
+#include "parser.hpp"
+#include "lexer.hpp"
+#include "table.hpp"
+#include "driver.hpp"
 // #include <iostream> // 冗長 dc.hpp にもある
 #include <sstream>
 

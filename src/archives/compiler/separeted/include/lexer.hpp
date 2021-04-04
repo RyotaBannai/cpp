@@ -1,14 +1,7 @@
 #include <iostream>
-#include <map>
 #include <string>
+#include "error.hpp"
 using namespace std;
-
-namespace Parser
-{
-double expr(bool);
-double term(bool);
-double prim(bool);
-} // namespace Parser
 
 namespace Lexer
 {
@@ -68,16 +61,3 @@ public:
 };
 extern Token_stream ts;
 } // namespace Lexer
-namespace Table
-{
-extern map<string, double> table;
-} // namespace Table
-namespace Error
-{
-extern int no_of_errors;
-double error(const string &s);
-} // namespace Error
-namespace Driver
-{
-void calculate();
-} // namespace Driver

@@ -1,9 +1,7 @@
-#include "dc.hpp"
-using namespace Lexer;
-using Table::table;
+#include "parser_impl.hpp"
+
 double Parser::term(bool);
 double Parser::prim(bool);
-
 double Parser::expr(bool get)
 {
   double left = Parser::term(get);
