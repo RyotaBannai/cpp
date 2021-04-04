@@ -7,25 +7,37 @@ using namespace std;
 class Date
 {
   int d, m, y;
+  mutable bool cache_valid;
+  mutable string cache;
+  void compute_cache_value() const; // mutable なキャッシュを埋める
 
 public:
   explicit Date(int dd = 1, int mm = 1, int yy = 1970) : d{dd}, m{mm}, y{yy} {};
-  string to_string();
+  string string_rep() const; // 文字列表現
   void add_year(int n);
   void add_month(int n);
   void add_day(int n);
 };
-
-string Date::to_string()
+void Date::compute_cache_value() const
 {
   std::ostringstream d_str;
   d_str << y << "/" << m << "/" << d;
-  return d_str.str();
+  cache = d_str.str();
 }
 
-ostream &operator<<(ostream &os, Date &d)
+string Date::string_rep() const
 {
-  return os << d.to_string();
+  if (!cache_valid)
+  {
+    compute_cache_value();
+    cache_valid = true;
+  }
+  return cache;
+}
+
+ostream &operator<<(ostream &os, const Date &d)
+{
+  return os << d.string_rep();
 }
 
 void Date::add_day(int num)
