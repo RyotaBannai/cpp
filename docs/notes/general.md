@@ -316,4 +316,5 @@
     - Date のような`単純なユーザ定義型`を`具象型（concrete type）`と呼ぶ。`具象クラス`は、`組み込み型と同等`で、`値型（value type）`とも呼ばれ、それを利用したものは`値指向プログラミング（value-oriented programming）`と呼ばれる。これは、一般にオブジェクト指向プログラミング（object-oriented programming）とはまったく異なる.(480)
       - `具象型の目的`: 比較的単純な単一の処理を、効率よく的確に実行すること.(480)
       - 具象クラスからの派生では、仮想関数や実行時型情報が利用できないため、限られて場所で注意深く使うべきである(481)
-      
+  - `配置構文(placement syntax)`: 割り振られたス トレージ・ロケーションを指定して、そのストレージ（メモリ領域）にオブジェクトを作成する（new）方法(292)
+    - [Ref](https://www.ibm.com/docs/ja/xl-c-and-cpp-aix/13.1.0?topic=only-placement-syntax)
