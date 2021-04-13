@@ -90,8 +90,8 @@
   "C_Cpp.vcFormat.newLine.scopeBracesOnSeparateLines": true,
   "C_Cpp.vcFormat.newLine.closeBraceSameLine.emptyType": true,
   "C_Cpp.vcFormat.newLine.closeBraceSameLine.emptyFunction": true,
-  "C_Cpp.vcFormat.newLine.beforeCatch": true,
-  "C_Cpp.vcFormat.newLine.beforeElse": true,
+  "C_Cpp.vcFormat.newLine.beforeCatch": false,
+  "C_Cpp.vcFormat.newLine.beforeElse": false,
   "C_Cpp.vcFormat.newLine.beforeWhileInDoWhile": true,
   "C_Cpp.formatting": "vcFormat",
   // "C_Cpp.clang_format_path": "/usr/local/Cellar/clang-format/11.1.0/"
