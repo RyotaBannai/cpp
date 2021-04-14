@@ -13,7 +13,7 @@ struct Assoc {
 
 // const メンバにはなれない
 int& Assoc::operator[](const string& s) {
-  for (auto x : vec)
+  for (auto& x : vec)
     if (s == x.first)
       return x.second;
   vec.push_back({ s, 0 });
