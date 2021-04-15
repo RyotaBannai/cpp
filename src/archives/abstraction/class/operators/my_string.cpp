@@ -49,15 +49,19 @@ private:
       throw std::out_of_range("String::at()");
   }
 
-  // メモリ領域が不足した時に、新たに n size で確保
-  char* expand(const char* ptr, int n) {
-    char* p = new char[n];
-    strcpy(p, ptr);
-    return p;
-  }
-
   void copy_from(const String& x);
   void move_from(String& x);
+}
+
+/*
+expand() は String の内部表現にアクセスする必要がない、より汎用的な関数にできるため、
+非メンバ関数として宣言する
+*/
+// メモリ領域が不足した時に、新たに n size で確保
+char* expand(const char* ptr, int n) {
+  char* p = new char[n];
+  strcpy(p, ptr);
+  return p;
 }
 
 void main() {
