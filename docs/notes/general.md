@@ -454,3 +454,6 @@
     - 適切なオブジェクトを作成するには、その正確な型をコンストラクタが知っておかなければならない. そのため、virtual にはなれない. さらに、コンストラクタを指すポインタを取り出すことはできないし、そのポインタをオブジェクト作成関数に渡すこともできない. そのため、オブジェクトの作成には仮想コンストラクタを使用する.
   - `protected`: 基底クラスに限定公開データを集約してしまうことに繋がったり、それがどのように変更されるのかについて全ての利用箇所を探し出すのが困難になることがあるため保守上の問題に繋がりやすい. 幸いなことに、限定公開データを利用する必要はない. 
     - `限定公開関数`は上記の問題には当てはまらない. (606)
+  - `仮想デストラクタ(virtual destructor)`: 基底クラスが派生クラスへのポインタを指すときに、基底クラスを削除 (delete)すると、規定クラスのデストラクタは呼ばれるが、派生クラスのデストラクタは呼ばれないためリークする. 派生クラスのデストラクタを呼びたい時には、仮想デストラクタにして、派生先でオーバライドする.
+    - If you want to prevent the deletion of an instance through a base class pointer, you can make the base class destructor `protected` and `nonvirtual`; by doing so, the compiler won't let you call `delete` on a base class pointer.
+    - [Ref](https://stackoverflow.com/questions/461203/when-to-use-virtual-destructors)
