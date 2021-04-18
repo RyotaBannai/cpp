@@ -457,3 +457,16 @@
   - `仮想デストラクタ(virtual destructor)`: 基底クラスが派生クラスへのポインタを指すときに、基底クラスを削除 (delete)すると、規定クラスのデストラクタは呼ばれるが、派生クラスのデストラクタは呼ばれないためリークする. 派生クラスのデストラクタを呼びたい時には、仮想デストラクタにして、派生先でオーバライドする.
     - If you want to prevent the deletion of an instance through a base class pointer, you can make the base class destructor `protected` and `nonvirtual`; by doing so, the compiler won't let you call `delete` on a base class pointer.
     - [Ref](https://stackoverflow.com/questions/461203/when-to-use-virtual-destructors)
+  - `メンバへのポインタ`: `->*`や `.*`を使って、メンバ関数をポインタ経由で呼び出す手法:
+    - `p->*m`: ポインタ p が指すオブジェクトにメンバ m を結びつける
+    - `obj.*m`: オブジェクト obj にメンバ m を結びつける
+    - 通常のポインタとは違う.
+      - static なメンバはメンバへのポインタになりえない.
+    - メンバ関数へのポインタは、関数名が不明な場合に利用される
+    - `通常のポインタとメンバへのポインタのセマンティクスの違い`:
+      - `通常のポインタ`: `void(*p)() = &Task::schedule;` 関数 schedule へのポインタを p へ代入
+      - `メンバへのポインタ`: `void (Task::* pm)() = &Task::schedule;`
+  - `反変性(contravriance)`: 規定クラスのメンバを派生クラスのメンバへのポインタ経由で変更することは安全であるが、その反対は安全でない. この性質を`反変性`という.
+    - 「ポインタは、そのポインタをさすために必要な最小限の性質を持っていないオブジェクトは指さない」という基本的な原則に従うと、規定クラスのメンバへのポインタへ、派生クラスの関数へのポインタを代入するということは実行時エラーにつながる.
+    - `void (Base::* pmb)() = &Derived::print; // error`: Base は print を持たない
+    - `void (Derived::* pmd)() = &Base::start; // ok`: Defived は間違いないう start を持つ
