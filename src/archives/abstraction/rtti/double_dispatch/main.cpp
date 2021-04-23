@@ -12,7 +12,6 @@ class Triangle;
 
 class Shape {
 public:
-  Shape(){};
   virtual bool intersect(const Shape &) const = 0;
   virtual bool intersect(const Circle &) const = 0;
   virtual bool intersect(const Triangle &) const = 0;
@@ -32,27 +31,35 @@ public:
   virtual bool intersect(const Triangle &) const override;
 };
 
-bool Circle::intersect(const Shape &s) const { return s.intersect(*this); }
+bool Circle::intersect(const Shape &s) const
+{
+  cout << "intersect (circle, shape)\n";
+  return s.intersect(*this);
+}
 bool Circle::intersect(const Circle &) const
 {
-  cout << "intersect (circle, circle)\n" << endl;
+  cout << "intersect (circle, circle)\n";
   return true;
 }
 bool Circle::intersect(const Triangle &) const
 {
-  cout << "intersect (triangle, circle)\n" << endl;
+  cout << "intersect (circle, triangle)\n";
   return true;
 }
 
-bool Triangle::intersect(const Shape &s) const { return s.intersect(*this); }
+bool Triangle::intersect(const Shape &s) const
+{
+  cout << "intersect (triangle, shape)\n";
+  return s.intersect(*this);
+}
 bool Triangle::intersect(const Circle &) const
 {
-  cout << "intersect (circle, triangle)\n" << endl;
+  cout << "intersect (triangle, circle)\n";
   return true;
 }
 bool Triangle::intersect(const Triangle &) const
 {
-  cout << "intersect (triangle, triangle)\n" << endl;
+  cout << "intersect (triangle, triangle)\n";
   return true;
 }
 
@@ -66,7 +73,7 @@ void do_something(Shape &s1, Shape &s2)
 void test(Triangle &t, Circle &c)
 {
   vector<pair<Shape *, Shape *>> vs{{{&t, &t}, {&t, &c}, {&c, &t}, {&c, &c}}};
-  for (auth p : vs)
+  for (auto p : vs)
     p.first->intersect(*p.second);
 }
 
@@ -74,5 +81,21 @@ int main()
 {
   Triangle t{};
   Circle c{};
-  test(, );
+  test(t, c);
+  /*
+  The process of {&t, &c}
+
+  p.first->intersect: Shape is called, and Shape is virtual so explores its implementation, which is
+  Triangle. Therefore this ended up resolving it as triangle->intersect(Shape &s)
+
+  s.intersect(*this): *this means Triangle, thus tries to look up shape->interface(Triangle &),
+  and because it's virtual, it goes down to its implementation, which is
+  circle->interface(Triangle &). Therefore, displays 'intersect (circle, triangle)'
+  */
+  /*
+  intersect (triangle, triangle)
+  intersect (triangle, circle)
+  intersect (circle, triangle)
+  intersect (circle, circle)
+  */
 }
