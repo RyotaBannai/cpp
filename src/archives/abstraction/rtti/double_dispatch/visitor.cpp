@@ -57,15 +57,26 @@ void test(Expr &e, Stmt &s)
     p.first->accept(*p.second);
 }
 
+void peek_type()
+{
+  Expr e{};
+  Stmt s{};
+
+  cout << typeid(e).name() << endl;
+  cout << typeid(s).name() << endl;
+}
+
 int main()
 {
   Expr e{};
   Stmt s{};
-  test(e, s);
+  // test(e, s);
   /*
   do1 to Expr
   do2 to Expr
   do1 to Stmt
   do2 to Stmt
   */
+
+  peek_type();
 }
