@@ -15,6 +15,14 @@ template <typename Iter, typename Val> Val sum(Iter first, Iter last)
   return s;
 }
 
+template <typename Iter, typename Val, typename Oper>
+Val accumulate(Iter first, Iter last, Val s, Oper op)
+{
+  while (first != last)
+    s = op(s, *(first++));
+  return s;
+}
+
 // 自作の単方向連結リスト
 struct Node {
   Node *next;
@@ -54,6 +62,18 @@ void use_sum()
   cout << si << endl;
 }
 
+void use_accumlate()
+{
+  array<int, 4> ai = {{1, 2, 3, 4}};
+  int sip = accumulate(ai.begin(), ai.end(), 10, plus<double>{});
+  int sim = accumulate(ai.begin(), ai.end(), 10, multiplies<double>{});
+  int sil = accumulate(ai.begin(), ai.end(), 0, [](auto a, auto b) { return a < b ? ++a : a; });
+
+  cout << sip << endl;
+  cout << sim << endl;
+  cout << sil << endl;
+}
+
 void use_sum_node()
 {
   Node n1{1};
@@ -74,6 +94,7 @@ int main()
 {
   use_sum();
   use_sum_node();
+  use_accumlate();
 }
 
 /*
@@ -83,8 +104,8 @@ When you are defining a binary operator outside a class, it takes two parameters
 
 struct Foo;
 bool operator == (Foo const& a, Foo const& b);
-When you define an operator inside a class, it takes one parameter, because the other is implicitly
-this:
+When you define an operator inside a class, it takes one parameter, because the other is
+implicitly this:
 
 struct Foo {
     bool operator == (Foo const& a);
