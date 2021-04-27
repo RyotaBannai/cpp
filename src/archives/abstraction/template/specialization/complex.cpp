@@ -24,7 +24,7 @@ public:
 // specialization この場合は別の定義が生成されることはない(736)
 template <> class complex<float> {
 public:
-  // float の場合、スカラ大隠喩演算子が参照の引数を受け取ると非効率なので、値渡しできるようにする
+  // float の場合、スカラ代入演算子が参照の引数を受け取ると非効率なので、値渡しできるようにする(733)
   complex<float> &operator=(float);
   complex<float> &operator+=(float);
   //
