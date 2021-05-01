@@ -630,3 +630,5 @@
     - これを実現するためには、`std::conditional` を利用する(783) conditional のような`型関数`は `型性質の述語`、`型の複合述語`などと呼ばれる. (784)
       - `型別名`: 型関数には `::type` が付くため、型別名を使って隠蔽すると良い:
         - `template<bool C, typename T, typename F> using Conditional = typename std::conditional<C, T, F>::type;`
+  - メタプログラミングの再帰処理は、呼び出しが特殊化まで到達した時にその再帰が終了する(793)
+  - 関数テンプレートの代わりにクラスを用いる場合は、返却値は `::value`, 返却値型は `::type` で取得(794)

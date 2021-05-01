@@ -7,7 +7,7 @@ template <unsigned N, typename T, typename... Cases>
 struct select<N, T, Cases...> : select<N - 1, Cases...> {
 };
 
-// 最後のケース　N == 0
+// 最後のケース N == 0
 template <typename T, typename... Cases> struct select<0, T, Cases...> {
   using type = T;
 };
