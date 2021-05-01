@@ -631,6 +631,7 @@
     - これを実現するためには、`std::conditional` を利用する(783) conditional のような`型関数`は `型性質の述語`、`型の複合述語`などと呼ばれる. (784)
       - `型別名`: 型関数には `::type` が付くため、型別名を使って隠蔽すると良い:
         - `template<bool C, typename T, typename F> using Conditional = typename std::conditional<C, T, F>::type;`
+  - `コンパイル時に繰り返し処理を実現したい時は再帰を用いる`.
   - メタプログラミングの再帰処理は、呼び出しが特殊化まで到達した時にその再帰が終了する(793)
   - 関数テンプレートの代わりにクラスを用いる場合は、返却値は `::value`, 返却値型は `::type` で取得(794)
   - `Enable_if`: 第一引数の条件が true であれば、第二引数の型を返却値型とする関数を生成し、false の場合は、その関数宣言自体を破棄
@@ -645,7 +646,7 @@
   - `可変個引数（variadic parameters）`: `Args...`: 省略記号 `...` を使用したパラメータを `パラメータパック（parameter pack）`と言う.
     - `...` はなんならかのものが 0 回以上繰り返すと言う意味 (812)
     - 省略記号は、引数だけに限られていない. 例えば、複数の基底クラスを継承することを表現する `template<typename... Bases> class X: public Bases... { // }` のような使い方もできる(813)
-    - `sizeof... 式`: 可変個引数の要素数を調べる.:
+    - `sizeof...(Args) 式`: `typename... Args` で指定された可変個引数の要素数を調べる.:
       - `template<typename T, typename U, typename = Enable_if<sizeof...(Types)==2>> tuple(const pair<T,U>&);`
       - 要素数が２の場合のみ pair から tuple をつくる tuple メソッドを宣言する
   - `ユニバーサル参照と完全転送`:
