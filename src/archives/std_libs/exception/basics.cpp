@@ -1,20 +1,17 @@
 #include <iostream>
 #include <map>
-#include <vector>
 #include <string>
+#include <vector>
 
-struct Some_error
-{
+struct Some_error {
 };
 
 void taskmaster()
 {
-  try
-  {
+  try {
     auto result = do_task();
   }
-  catch (Some_error)
-  {
+  catch (Some_error) {
     // fails to do do_task()
   }
 }
@@ -22,12 +19,10 @@ void taskmaster()
 int do_task()
 {
   int result{1};
-  if (true)
-  {
+  if (true) {
     return result;
   }
-  else
-  {
+  else {
     throw Some_error{};
   }
 }
