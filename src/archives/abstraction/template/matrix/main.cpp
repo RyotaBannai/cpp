@@ -60,6 +60,21 @@ public:
   Enable_if<Matrix_impl::Requesting_element<Args...>(), Matrix_ref<const T, N>>
   operator()(const Args &...args) const;
 
+  /** 数値演算処理定義 */
+  template <typename F> Matrix &apply(F f);
+  // *this と m の対応する要素に f(x, mx) を適用
+  template <typename M, typename F> Enable_if<Matrix_type<M>(), Matrix &> apply(const M &m, F f);
+
+  Matrix &operator=(const T &value);
+  Matrix &operator+=(const T &value);
+  Matrix &operator-=(const T &value);
+  Matrix &operator*=(const T &value);
+  Matrix &operator/=(const T &value);
+  Matrix &operator%=(const T &value);
+  // 行列の加減算
+  template <typename M, typename> Enable_if<Matrix_type<M>(), Matrix &> operator+=(const M &x);
+  template <typename M, typename> Enable_if<Matrix_type<M>(), Matrix &> operator-=(const M &x);
+
   Matrix_ref<T, N - 1> operator[](size_t i) { return row(i); }; // m[i] 行アクセス
   Matrix_ref<const T, N - 1> operator[](size_t i) const { return row(i); };
 
@@ -121,6 +136,56 @@ Matrix<T, N> &Matrix<T, N>::operator=(const Matrix_ref<U, N> &x)
 template <typename T, size_t N> Matrix_ref<T, N - 1> Matrix<T, N>::operator[](size_t)
 {
   return row(n);
+}
+
+// compute scalars
+template <typename T, size_t N> Matrix<T, N> &Matrix<T, N>::operator+=(const T &val)
+{
+  return apply([x](T &a) { a += val; })
+}
+// compute Matrixs
+template <typename T, size_t N>
+template <typename M>
+Enable_if<Matrix_type<M>(), Matrix<T, N> &> Matrix<T, N>::operator+=(const M &m)
+{
+  static_assert(m.order == N, "+=: mismatched Matrix dimensions");
+  assert(same_extents(desc, m.descriptor())); // 要素数の一致を確認
+
+  return apply(m, [](T &a, const Value_type<M> &b) { a += b; });
+}
+
+template <typename T, size_t N> template <typename F> Matrix<T, N> &Matrix<T, N>::apply(F f)
+// elems は 1 次元の vector でしかないため全走査して f を適用する
+{
+  for (auto &x : elems)
+    f(x);
+  return *this;
+}
+
+template <typename T, size_t N>
+template <typename M, typename F>
+Enable_if<Matrix_type<M>(), Matrix<T, N> &> Matrix<T, N> &Matrix<T, N>::apply(M &m, F f)
+{
+  assert(same_extents(desc, m.descriptor())); // 要素数の一致を確認
+  for (auto i = begin(), j = m.being(), i != end(); ++i, ++j)
+    f(*i, *j);
+  return *this;
+}
+
+/** 数値演算処理実装 */
+// スカラーを加算
+template <typename T, size_t N> Matrix<T, N> operator+(const Matrix<T, N> &m, const T &val)
+{
+  Matrix<T, N> res = m;
+  res += val;
+  return res;
+}
+// 2 つの同じ desc の Matrix を加算
+template <typename T, size_t N> Matrix<T, N> operator+(const Matrix<T, N> &a, const Matrix<T, N> &b)
+{
+  Matrix<T, N> res = a;
+  res += b;
+  return res;
 }
 
 void initialize_matrix()
