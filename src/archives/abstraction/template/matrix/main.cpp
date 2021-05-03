@@ -192,13 +192,11 @@ void initialize_matrix()
 {
   enum class Piece { none, cross, naught };
 
-  Matrix<Piece, 2> board1
-  {
-    {
-      {Piece::none, Piece::none, Piece::none}, {Piece::none, Piece::none, Piece::none},
-          {Piece::none, Piece::none, Piece::none},
-    }
-  }
+  Matrix<Piece, 2> board1{{
+      {Piece::none, Piece::none, Piece::none},
+      {Piece::none, Piece::none, Piece::none},
+      {Piece::none, Piece::none, Piece::none},
+  }};
   Matrix<Piece, 2> board1(3, 3); // ok
   // Matrix<Piece, 2> board1{3, 3}; // err because constructor with initializer_list<U> is deleted
 }
