@@ -665,3 +665,11 @@
       - [2](https://stackoverflow.com/questions/3582001/what-are-the-main-purposes-of-using-stdforward-and-which-problems-it-solves/3582313#3582313)
       - [3](https://teratail.com/questions/282954)
       - [4](https://cpprefjp.github.io/reference/utility/forward.html)
+- `std ライブラリ`:
+  - エラーコード(`errc`, `ec`):
+    - 例外(exception) を利用できない場合は、`<system_error>` を検討する: エラーコードを分類、システム固有のエラーを可搬性の高いエラーコードへマッピング、エラーコードを例外へとマッピングする機能を提供(873)
+    - `ec==ec2`: エラーコードの等価性を評価. 等価になるためには `category()`, `value()` が同じになる必要がある. それぞれかの型が異なる場合は、 `category().equivalent()` が定義する. (874)
+  - `error_cod` から `error_condition` を取得するには、`default_error_condition()` を利用 (877)
+  - `error_condition` は潜在的に可搬性を持つエラーコードであり、システム固有の `error_code` とほぼ同一.(877)
+    - error_condition には `<<` operator と default_error_condition() がない.
+    - 複数のプラットフォームで動作するプログラムの開発者の便宜を図るため、可搬性を持つ値へとマッピングする、と言う考えに基づく.

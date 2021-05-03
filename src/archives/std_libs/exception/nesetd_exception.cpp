@@ -49,6 +49,9 @@ void user()
       cout << e.what() << endl;
     }
   }
+  catch (exception &e) {
+    cout << "some std lib error." << endl;
+  }
   catch (...) {
     cout << "unexpected error." << endl;
   }
