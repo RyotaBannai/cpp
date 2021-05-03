@@ -12,6 +12,8 @@ using M_iterator = decltype(mm)::iterator;
 pair<M_iterator, M_iterator> use_pair() { return make_pair(mm.lower_bound(k), mm.upper_bound(k)); }
 
 // using Make_pair_Ft = pair<M_iterator, M_iterator>();
+// check also
+// https://www.nextptr.com/tutorial/ta1193988140/how-cplusplus-using-or-aliasdeclaration-is-better-than-typedef
 
 // error: 'auto' not allowed in function prototype
 // auto show_apple = [](Make_pair_Ft f) -> void {
