@@ -669,7 +669,32 @@
   - エラーコード(`errc`, `ec`):
     - 例外(exception) を利用できない場合は、`<system_error>` を検討する: エラーコードを分類、システム固有のエラーを可搬性の高いエラーコードへマッピング、エラーコードを例外へとマッピングする機能を提供(873)
     - `ec==ec2`: エラーコードの等価性を評価. 等価になるためには `category()`, `value()` が同じになる必要がある. それぞれかの型が異なる場合は、 `category().equivalent()` が定義する. (874)
-  - `error_cod` から `error_condition` を取得するには、`default_error_condition()` を利用 (877)
+  - `error_code` から `error_condition` を取得するには、`default_error_condition()` を利用 (877)
   - `error_condition` は潜在的に可搬性を持つエラーコードであり、システム固有の `error_code` とほぼ同一.(877)
     - error_condition には `<<` operator と default_error_condition() がない.
     - 複数のプラットフォームで動作するプログラムの開発者の便宜を図るため、可搬性を持つ値へとマッピングする、と言う考えに基づく.
+  - `コンテナ`:
+    - `コンテナ種別`:
+      - `シーケンスコンテナ(sequence container)`: 半開区間の要素シーケンスのアクセスを提供:
+        - `deque`: `デック(deck)` とよび、vector と list が混ざったもの.
+      - `連想コンテナ(associative container)`: キーに基づいた連想探索を提供
+        - map, unordered_multimap など
+      - `コンテナアダプタ(container adapter)`: ベースとなるコンテナへ特殊化されたアクセス手段を提供
+        - stack, queue, priority_queue など
+      - `コンテナ相当(almost container)`: 全てではないものの、コンテナの機能を多く持っている、要素のシーケンス - `T[N]`, array, string, basic_string など
+        - STL コンテナ（シーケンスコンテナ、連想コンテナ）のみハンドルである.(886) array などはハンドルを持たないため、空き領域に対する処理を一切行わない(890)
+    - `アロケータ(allocator)`: 要素のためのメモリを `operator new()` によって確保し、`operator delete()` によって解放する機構
+      - コンテナのハンドルがアロケーたを保持する(888)
+    - オブジェクトをコピーすることが妥当でない場合は、コンテナには、オブジェクトそのものではなく、オブジェクトを指すポインタを格納すれば良い 
+      - 例えば、多相型では、 `vector<Shape>` ではなく、 `vector<unique_ptr<Shape>>` や `vector<Shape*>` を用いれば、多相的な動作が維持される. (891)
+    - 比較演算: 順序づけの基準では、 `厳密で弱い順序(strict weak ordering)` を定義する必要がある.
+      - 基準:
+        - 非反射性(`cmp(x, x)` は false),
+        - 対称性(`cmp(x, y)` なら `!cmp(y, x)`)
+        - 推移性(`cmp(x, y)`, `cmp(y, z)` なら `cmp(x, z)`)
+        - 等価性の推移性(等価性判定 `equiv(x, y)` を `!(cmp(x, y)||cmp(y, x))` とした時、`equiv(x, y)`, `equiv(y, z)` なら `equiv(x, z)`. `!(cmp(x, y)||cmp(y, x))` は、非反射性を持つならば一つ目 -> 二つ目の判定で、連続して false となるため、結果として等価性を判定することができる)(891)
+          - つまり、独自比較処理 では等価性判定処理(等値演算)を提供しなくて良い.
+      - C 言語スタイルの文字列比較では、std::less ではなく、独自比較処理用のファンクターを `strcmp(p,q)<0`を使って実装する(892)
+      - 等値演算(デフォルトでは == )が透過性判定と常に同じ結果となる場合は、`全順序（total order）`であると言う.
+      - `reserve` が性能に貢献することはほとんどない. 性能を予測しやすくするとともに、プログラムにとって不便な、反復氏が無効になる自体を防ぐためのものだと考える(899)
+      - `v.begin()`, `b.end()` の duplicate 判定では、`if(p!=v.begin() && *(p-1)==*p)` を使うと良い.
