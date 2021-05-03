@@ -17,7 +17,8 @@ pair<M_iterator, M_iterator> use_pair() { return make_pair(mm.lower_bound(k), mm
 
 // error: 'auto' not allowed in function prototype
 // auto show_apple = [](Make_pair_Ft f) -> void {
-auto show_apple = [](auto f) -> void {
+auto show_apple = [](decltype(use_pair) f) -> void {
+  // auto show_apple = [](auto f) -> void {
   auto pp = f();
   if (pp.first == pp.second)
     cout << "the key not found." << endl;
