@@ -57,7 +57,10 @@
 - `conditional_variable`: lock とイベント待ち: 他のスレッドの結果によってなんならかの条件が成立するまで、別のスレッドを待機させる、と言ったことが可能.(127)
   - 関数の中では、初めに `mutex` を取得し、`conditional_variable.wait(unique_lock<mutex>)` で、`mutex` を解放し wait する。condition が成立したら（待機が終わったら）、再度 `unique_lock<mutex>` を取得し、ロックをかける。
   - condition が成立したことを通知するには、`conditional_variable.notify_one()` で行う
-- `tag dispatch（タグ指定）`: overload, single/multi dispatch を前提とした機能で、iterator pattern をアルゴリズムに適用したもの。タグと呼ばれる、組み込みの機能（例えば、`std::random_access_iterator_tag（for vector）`, `std::forward_iterator_tag（for forward_list）`）を関数の引数として使い、コンパイル時に複数のアルゴリズムのうちから１つ選択することができる機能。このタグを取得するために、`iterator_traits` (この場合は container )などから tag を取得することができる。また、こういった関数（/アルゴリズム: 引数あるいは返却値として、ある型が与えられて、コンパイル時に評価される関数）を`型関数(type function)`と言う。(132)
+- `tag dispatch（タグ指名）`: overload, single/multi dispatch を前提とした機能で、iterator pattern をアルゴリズムに適用したもの.
+  - タグと呼ばれる、組み込みの機能（例えば、`std::random_access_iterator_tag（for vector）`, `std::forward_iterator_tag（for forward_list）`）を関数の引数として使い、コンパイル時に複数のアルゴリズムのうちから１つ選択することができる機能
+  - このタグを取得するために、`iterator_traits` (この場合は container )などから tag を取得することができる
+  - また、こういった関数（/アルゴリズム: 引数あるいは返却値として、ある型が与えられて、コンパイル時に評価される関数）を`型関数(type function)`と言う(132)
 - `型述語`：型に関する基本的な情報を返却するための単純な`型関数`である。このような述語（predicate）は、`<type_traits>`で提供される
 - `make_pair()` を使うと、明示的な型の記述が不要になるため pair の作成が容易になる(135)
 - その機能に、理屈通りで容易に実装できる別の方法が複数あれば、その機能は、`定義されない（undefined）`ではなく、`指定されない（unspecified）`あるいは、`処理系定義（implementation defined）`である(144)
@@ -732,3 +735,18 @@
       - ソート済みのシーケンスの並びを維持したい場合は、lower_bound or upper_bound で位置を特定し、pair second の前後に insert すると良い(947)
     - `集合アルゴリズム`: 入力シーケンスは、ソートされていることが前提で、出力シーケンスもソートされたものとなる
       - includes, set_union, set_symmetric_difference など
+  - `STL 反復子`:
+    - `シーケンス(sequence)`は、２個の反復子によって指定される半開放区間 `[begin:end)` として定義される(954)
+    - `[p:p)`: 空シーケンス
+    - シーケンスの探索が最後に達したかどうかの判定は `b<e` ではなく `b!=e`で表す. これは < をサポートしているのがランダムアクセス反復子に限られるためである
+    - 一般に次のようなことは行えない: `template<typename Iter> typename Iter::value_type read(Iter p, int n) {...}`
+      - こうではなく次のような記述になる: `template<typename Iter> typename iterator_trails<Iter>::value_type read(Iter p, int n) {...}`
+    - 反復子の処理: p がランダムアクセス反復子でなければ、アルゴリズムには n ステップが必要(959)
+    - `<iterator>` を `#include` していると、begin(), end() のメンバを持つユーザ定義のコンテナは自動的に非メンバ版を持つことになる.
+      - 独自に実装したコンテナに対して、それらの非メンバ関数を持たせたいときは、追加で提供する必要がある. (965)
+    - `function`: `bind()` の結果をある特定の型の変数に代入するのであれば `function` を使う(969)
+      - 呼び出し可能オブジェクトを単純に呼び出すのではなく function 型を検証するために用意されている(970)
+      - `function<int(double)> f; f=[](double d){ return round(d); };` のように変数に関数型を与える.
+      - `bool b = f;`: 関数 f を bool へ変換する. f が空でなければ true(`nullptr` or `function<T> f {};`)
+      - `p=f.target<F>()`: `f.target_type()==typeid(F)`の場合、p は保持しているオブジェクトを返す.
+      - `ti=f.target_type()`: 呼び出す関数を持っていれば、その関数の型を表す `type_info` オブジェクトを返す
