@@ -792,7 +792,7 @@
     - `内側のコンテナと外側のコンテナ`が別々のアロケータを使う場合は `scoped_allocator_adaptor` を使う.(1001)
       - scoped_allocator_adaptor でラップするだけで良い. `using Xstring = basic_string<char, char_traits<char>, My_aclloc<char>>;`の時：
         - 通常 vector は `vector<string>` とする
-        - scoped_allocator_adaptor の場合 vector は `vector<Xstring, scoped_allocator_adaptor<My_aclloc<Xstring>>>` のように第二引数に scoped_allocator_adaptor でラップしたアロケータを追加する(1001)
+        - scoped_allocator_adaptor の場合 vector は `vector<Xstring, scoped_allocator_adaptor<My_alloc<Xstring>>>` のように第二引数に scoped_allocator_adaptor でラップしたアロケータを追加する(1001)
   - `ガベージコレクションインタフェース`:
     - `利用しない場合`:
       - 資源ハンドルが利用できる場合. 標準ライブラリの string, vector, unordered_map, thread, lock_guard など.
@@ -805,3 +805,16 @@
     - メモリ以外の資源を処理しようとして、一般的なファイナライザを使おうとしてはいけない(1003)
     - `安全に派生したポインタ（safely-derived pointer）`: new から作成したポインタと、その部分オブジェクトを指すポインタ
     - `偽装ポインタ(disguised pointer)`: 安全に派生したポインタではないポインタ
+- `ユーティリティ`:
+  - クロック型: `system_clock`, `steady_clock`, `high_resolution_clock` (1015)
+  - `型関数`:
+    - `一次型述語（primary type predicate）`: 型の基本的な性質を調べる.(`is_void<X>`, `is_integral<X>`, `is_lvalue_reference<X>`, `is_rvalue_reference<X>`, `is_member_object_pointer<X>`, `is_member_function_pointer<X>`)(1019)
+    - `複合型述語（composite type predicate）`
+      - `is_reference`: `is_lvalue_reference<X>` or `is_rvalue_reference<X>`
+      - `is_member_pointer`: `is_member_object_pointer<X>` or `is_member_function_pointer<X>`
+      - `is_scalar`: 非クラス、非関数か? `is_fundamental`: 基本型(int, float, bool, char など(146))か?
+      - `is_object`: 非関数か?
+    - `型性質述語（type property predicate）`: 型の基本的な性質を調べる
+      - `is_const`: const か?
+      - `is_destructible`: 解体可能か?(`~X()` が削除されていないか)
+      - `is_empty()`: 非 static data member, 仮想関数、仮想基底、`!is_empty<Base>::value` が成立する基底クラスを一切持たない場合
