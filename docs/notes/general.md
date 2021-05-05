@@ -793,3 +793,15 @@
       - scoped_allocator_adaptor でラップするだけで良い. `using Xstring = basic_string<char, char_traits<char>, My_aclloc<char>>;`の時：
         - 通常 vector は `vector<string>` とする
         - scoped_allocator_adaptor の場合 vector は `vector<Xstring, scoped_allocator_adaptor<My_aclloc<Xstring>>>` のように第二引数に scoped_allocator_adaptor でラップしたアロケータを追加する(1001)
+  - `ガベージコレクションインタフェース`:
+    - `利用しない場合`:
+      - 資源ハンドルが利用できる場合. 標準ライブラリの string, vector, unordered_map, thread, lock_guard など.
+      - unique_ptr を利用すべき場合.
+        - 自分が利用する資源を暗黙裏に管理しないオブジェクト (pointer)
+        - 想定よりも先に破棄されることを防ぎたいオブジェクト (適切なデストラクタを持たないため)
+        - 特殊な方法で確保する必要があるオブジェクト (デリータ)
+      - shared_ptr を利用すべき場合.
+    - メモリ以外の資源は扱えないが、メモリの回収、再利用は行える.
+    - メモリ以外の資源を処理しようとして、一般的なファイナライザを使おうとしてはいけない(1003)
+    - `安全に派生したポインタ（safely-derived pointer）`: new から作成したポインタと、その部分オブジェクトを指すポインタ
+    - `偽装ポインタ(disguised pointer)`: 安全に派生したポインタではないポインタ
