@@ -82,7 +82,8 @@
     "variant": "cpp",
     "__functional_03": "cpp",
     "filesystem": "cpp",
-    "__functional_base_03": "cpp"
+    "__functional_base_03": "cpp",
+    "unordered_set": "cpp"
   },
   "C_Cpp.errorSquiggles": "Disabled",
   "C_Cpp.autocompleteAddParentheses": true,
