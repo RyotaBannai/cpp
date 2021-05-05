@@ -786,3 +786,10 @@
       - 小惑星同士が衝突すると一つ以上の小惑星が崩壊する（デストラクタによって解体される）
       - 一方で他の小惑星が(衝突の影響の計算などのために)探索中であれば、小惑星を解体してはならない.
       - そこで必要となるのが、まだ崩壊していない可能性を持つ小惑星リストと当面の間維持する方法である -> 他の小惑星が `wp.lock()` を実行中の間は、shared_ptr の解体を先送りする. どの所有者も lock せず、参照カウントも 0 になった時に初めて破棄する. lock 解除後も他の小惑星が参照しているときは、破棄されず最後の小惑星がなくなるまで解体されない.
+  - `アロケータ（allocator）`:
+    - 必要な時にメモリを獲得し、不要になった時点で返却する役割.(996)
+    - 標準の全てのコンテナは(new によってメモリを確保し、delete によって解放する)デフォルトのアロケータを持っている(997)
+    - `内側のコンテナと外側のコンテナ`が別々のアロケータを使う場合は `scoped_allocator_adaptor` を使う.(1001)
+      - scoped_allocator_adaptor でラップするだけで良い. `using Xstring = basic_string<char, char_traits<char>, My_aclloc<char>>;`の時：
+        - 通常 vector は `vector<string>` とする
+        - scoped_allocator_adaptor の場合 vector は `vector<Xstring, scoped_allocator_adaptor<My_aclloc<Xstring>>>` のように第二引数に scoped_allocator_adaptor でラップしたアロケータを追加する(1001)
