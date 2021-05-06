@@ -818,3 +818,12 @@
       - `is_const`: const か?
       - `is_destructible`: 解体可能か?(`~X()` が削除されていないか)
       - `is_empty()`: 非 static data member, 仮想関数、仮想基底、`!is_empty<Base>::value` が成立する基底クラスを一切持たない場合
+- `文字列`:
+  - [Ref](https://cpprefjp.github.io/reference/string/char_traits.html)
+  - 文字の判定には、標準の`文字クラスの判定関数`を利用する:
+    - 他の locale に変更が容易である: `islower(ch, danish) // danish をロケールと仮定した時に、ch はデンマーク語における小文字か?`
+  - 標準では４種類（char, char16_t, char32_t, wchar_t）の char_traits の特殊化を提供する(1035)
+  - `std::string` と同じ型を作るには、上記の４種類のうち char の特殊化`std::char_traits<char>`を利用して、basic_string に与える:
+    - `std::basic_string<char, std::char_traits<char>>` == `std::string`
+    - 比較では、char_traits で定義されている compare が利用される(`char_traits::compare()`)
+  - オリジナルの型を作成する場合（b B の比較を insensitive にしたいなど）は、`std::char_traits<T>` をベースとした `base_traits` を使って、そのメソッドを流用するとよい.
