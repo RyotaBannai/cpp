@@ -827,3 +827,14 @@
     - `std::basic_string<char, std::char_traits<char>>` == `std::string`
     - 比較では、char_traits で定義されている compare が利用される(`char_traits::compare()`)
   - オリジナルの型を作成する場合（b B の比較を insensitive にしたいなど）は、`std::char_traits<T>` をベースとした `base_traits` を使って、そのメソッドを流用するとよい.
+  - 0 を渡すと nullptr になるため注意 `string s{0} // s == nulltpr`
+  - C 言語スタイルのポインタを渡してはいけないし、動作するかどうかはそのポインタの値に依存 `const char* p = 0; string s{p}; // DON'T`. またその値を c_str で変換した結果を `strcmp()` などの C 言語の文字列関数に対して実行しない
+  - string を処理系が処理できないほどの長さで初期化しようとすると `std::length_error` 例外が送出される
+    - この長さは `s.max_size()` で確認. resize や reserve がこの数値を超えると例外を送出.
+  - string コンストラクタの pos は `[b, e)` ではなく、`(pos, length)` (反復子で表すならば `[b, e]`) である点に注意.
+  - C 言語スタイルの `char*` への暗黙的な変換はエラーにつながりやすいため存在しない. 変換には明示的に `c_str() またはそれをラップする data()` を利用(1041)
+  - 文字列から数値への変換には `sto*`関数を利用.
+    - 基数用の引数には`[2:36]`の範囲を受け取れる.
+    - 例: `string s = "149F; stoi(s) // 149, stoi(s, nulltpr, 10) // 10 進数で処理 -> 149, stoi(s, nulltpr, 8) // 8 進数で処理 -> 014`
+    - 変換可能な文字列がなければ `invalid_argument` エラー
+    - 目的の型に変換できない場合（stoi としているのに int 以上の数値を検出した場合など）`out_of_range` エラー (かつ `errno=ERANGE` をセット).
