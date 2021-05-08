@@ -849,3 +849,12 @@
     - Using `std::move()` can be worse than simply naming the variable to be returned because it suppresses the `return value optimization`.(You should not return a reference to a local variable. It is always undefined behavior, plain and simple.)The return value optimization allows for an object to be returned to the caller without needing to copy that object.
     - `RVO as compiler optimization` versus `copy/move-construction` as in C++ language rules, which are two very different situations of `eliding a copy`.
     - [Ref](https://stackoverflow.com/questions/12011426/how-to-use-move-semantics-with-stdstring-during-function-return)
+- `正規表現`:
+  - `()` group (部分パターン)化した文字列は matches コンテナから取得できる
+    - 部分パターンではない `()` を定義したい場合(or をグループ化したい場合など`(a|b|c)`.)は `(?:` から始める(1056)
+    - 入れ子の部分パターンは認識されない
+    - `\1` などですでにマッチしたグループを参照した時には、参照する側もグループとしてみなされる
+  - 部分一致は複数の `sub_match` を持つコンテナである `match_results` に格納されている(1059)
+    - `match_results[n]`: n 番目にマッチした sub_match にアクセス
+  - C++ はデフォルトで最長一致(`Max Munch 規則`)ある. `lazy` or `non-greedy` にしたいなら繰り返し表現の直後に `?` をつける(1053)
+  - `regex_replace` と書式か指定子（`$1`, `$&` など） でマッチした内容を書式化できる.(1062)
