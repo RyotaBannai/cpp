@@ -819,6 +819,7 @@
       - `is_destructible`: 解体可能か?(`~X()` が削除されていないか)
       - `is_empty()`: 非 static data member, 仮想関数、仮想基底、`!is_empty<Base>::value` が成立する基底クラスを一切持たない場合
 - `文字列`:
+  - 速度性能向上を意図した最適化が必要な場合は `at()` ではなく、`反復子`や `[]` を利用(1049)
   - [Ref](https://cpprefjp.github.io/reference/string/char_traits.html)
   - 文字の判定には、標準の`文字クラスの判定関数`を利用する:
     - 他の locale に変更が容易である: `islower(ch, danish) // danish をロケールと仮定した時に、ch はデンマーク語における小文字か?`
@@ -831,10 +832,20 @@
   - C 言語スタイルのポインタを渡してはいけないし、動作するかどうかはそのポインタの値に依存 `const char* p = 0; string s{p}; // DON'T`. またその値を c_str で変換した結果を `strcmp()` などの C 言語の文字列関数に対して実行しない
   - string を処理系が処理できないほどの長さで初期化しようとすると `std::length_error` 例外が送出される
     - この長さは `s.max_size()` で確認. resize や reserve がこの数値を超えると例外を送出.
-  - string コンストラクタの pos は `[b, e)` ではなく、`(pos, length)` (反復子で表すならば `[b, e]`) である点に注意.
+  - string コンストラクタの pos は `[b, e)` ではなく、`(pos, n)` (n は文字列の length で反復子で表すならば `[b, e]`) である点に注意.
   - C 言語スタイルの `char*` への暗黙的な変換はエラーにつながりやすいため存在しない. 変換には明示的に `c_str() またはそれをラップする data()` を利用(1041)
-  - 文字列から数値への変換には `sto*`関数を利用.
+  - 文字列から数値への変換には `sto*`関数を利用. ただ `sto*` を直接利用するよりも `string_stream` や（`to<X>`などの）汎用値抽出関数を優先した方がよい.(1049)
     - 基数用の引数には`[2:36]`の範囲を受け取れる.
     - 例: `string s = "149F; stoi(s) // 149, stoi(s, nulltpr, 10) // 10 進数で処理 -> 149, stoi(s, nulltpr, 8) // 8 進数で処理 -> 014`
     - 変換可能な文字列がなければ `invalid_argument` エラー
     - 目的の型に変換できない場合（stoi としているのに int 以上の数値を検出した場合など）`out_of_range` エラー (かつ `errno=ERANGE` をセット).
+  - `assignment 類`:
+    - `s.assign(new_s); // new_s は string or initializer_list<char_type>`
+    - `s.append(n,c); // 文字 c を n 個追加`. insert, erase なども利用できる(1045)
+  - `部分文字列`:
+    - replace である`部分文字列`の置換ができるが、マジック定数を利用することが多いためエラーにつながりやすい(1046)
+    - `部分文字列` の探索は find or rfind
+  - string を関数から返却するときは RVO (Return Value Optimization)を利用する. `std::string func() { std::string rv{"I'm a local variable."}; return rv; }`:
+    - Using `std::move()` can be worse than simply naming the variable to be returned because it suppresses the `return value optimization`.(You should not return a reference to a local variable. It is always undefined behavior, plain and simple.)The return value optimization allows for an object to be returned to the caller without needing to copy that object.
+    - `RVO as compiler optimization` versus `copy/move-construction` as in C++ language rules, which are two very different situations of `eliding a copy`.
+    - [Ref](https://stackoverflow.com/questions/12011426/how-to-use-move-semantics-with-stdstring-during-function-return)
