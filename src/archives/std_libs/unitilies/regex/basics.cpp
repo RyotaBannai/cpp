@@ -73,9 +73,9 @@ vector<string> split(string s, string delimiter)
  */
 
 template <std::size_t... S, typename K, typename V, typename T>
-void unpack_vector(map<K, V> &m, const vector<T> &vec, std::index_sequence<S...>)
+void unpack_vector(map<K, V> &m, const vector<T> &&vec, std::index_sequence<S...>)
 {
-  m.emplace(forward<decltype(vec[S])>(vec[S])...);
+  m.emplace(vec[S]...);
 }
 
 /**
@@ -86,12 +86,12 @@ void unpack_vector(map<K, V> &m, const vector<T> &vec, std::index_sequence<S...>
  */
 const std::size_t Vec_size = 2;
 template <std::size_t size, typename K, typename V, typename T>
-void emplace_from_vec(map<K, V> &m, const vector<T> &vec)
+void emplace_from_vec(map<K, V> &m, const vector<T> &&vec)
 {
   if (vec.size() != size)
     // throw; // ? should throw
     return;
-  unpack_vector(m, vec, make_index_sequence<2>());
+  unpack_vector(m, std::forward<decltype(vec)>(vec), make_index_sequence<2>());
 }
 
 void use_replace_then_parse()
@@ -103,7 +103,7 @@ void use_replace_then_parse()
 
   map<string, string> new_m;
   for (auto x : split(out, "\n"))
-    emplace_from_vec<Vec_size>(new_m, split(x, ","));
+    emplace_from_vec<Vec_size>(new_m, move(split(x, ","))); // ? no need to move
 
   cout << new_m;
 }
