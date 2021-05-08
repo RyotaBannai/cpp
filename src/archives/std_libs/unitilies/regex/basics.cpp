@@ -1,8 +1,11 @@
 #include <ctype.h>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <regex>
+#include <sstream>
 #include <string>
+#include <vector>
 using namespace std;
 
 void use()
@@ -29,4 +32,66 @@ void use()
   }
 }
 
-int main() { use(); }
+void use_replace()
+{
+  string input{"x 1 x2 10 x3 20"};
+  regex pat{R"((\w+)\s(\d+))"};
+  string format{"{$1, $2}\n"};
+  cout << regex_replace(input, pat, format, regex_constants::format_no_copy);
+}
+
+// for string delimiter
+vector<string> split(string s, string delimiter)
+{
+  size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+  string token;
+  vector<string> res;
+
+  while ((pos_end = s.find(delimiter, pos_start)) != string::npos) {
+    token = s.substr(pos_start, pos_end - pos_start);
+    pos_start = pos_end + delim_len;
+    res.push_back(token);
+  }
+
+  res.push_back(s.substr(pos_start));
+  return res;
+}
+
+template <std::size_t... S, typename T>
+void unpack_vector(const vector<T> &vec, std::index_sequence<S...>)
+{
+  // test2(vec[S]...);
+}
+
+template <std::size_t size, typename T> void unpack_vector(const vector<T> &vec)
+{
+  cout << vec.size() << endl;
+  if (vec.size() != size)
+    throw new exception() /* choose your error */;
+  unpack_vector(vec, std::make_index_sequence<size>());
+}
+
+void use_replace_then_parse()
+{
+  string input{"x 1 x2 10 x3 20"};
+  regex pat{R"((\w+)\s(\d+))"};
+  string format{"$1,$2\n"};
+  string out = regex_replace(input, pat, format, regex_constants::format_no_copy);
+
+  map<string, int> new_m;
+  for (auto x : split(out, "\n"))
+    unpack_vector<2>(split(x, ","));
+  // unpack_vector<2>(vector<string>{"a", "b"});
+  // cout << typeid(x).name() << endl;
+  // new_m.emplace_back(split(x, ",")...);
+
+  // for (auto m : new_m)
+  //   cout << m << endl;
+}
+
+int main()
+{
+  // use();
+  // use_replace();
+  use_replace_then_parse();
+}

@@ -850,6 +850,12 @@
     - `RVO as compiler optimization` versus `copy/move-construction` as in C++ language rules, which are two very different situations of `eliding a copy`.
     - [Ref](https://stackoverflow.com/questions/12011426/how-to-use-move-semantics-with-stdstring-during-function-return)
 - `正規表現`:
+  - `関数`:
+    - `regex_search`: 文字シーケンスを探索（ファイルのようなシーケンスの一部からパターンを探索. 全ての文字シーケンスに対してパターンを比較する場合は regex_match を利用）
+      - e.g. 綴りの間違いの検出(1065)
+    - `regex_match`: 固定長の文字シーケンスと比較 (テキスト一行など期待している形式とマッチするかどうかに使用)
+      - e.g. 各行の形式が決めらているテーブルの集計(1064)
+    - `regex_replace`: パターンを置換
   - `()` group (部分パターン)化した文字列は matches コンテナから取得できる
     - 部分パターンではない `()` を定義したい場合(or をグループ化したい場合など`(a|b|c)`.)は `(?:` から始める(1056)
     - 入れ子の部分パターンは認識されない
