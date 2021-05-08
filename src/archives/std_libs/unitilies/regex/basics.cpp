@@ -1,3 +1,4 @@
+#include <array>
 #include <ctype.h>
 #include <fstream>
 #include <iostream>
@@ -7,6 +8,13 @@
 #include <string>
 #include <vector>
 using namespace std;
+
+template <typename K, typename V> ostream &operator<<(ostream &os, const map<K, V> &m)
+{
+  for (const auto &p : m)
+    os << '{' << p.first << ": " << p.second << "}\n";
+  return os;
+}
 
 void use()
 {
@@ -40,7 +48,10 @@ void use_replace()
   cout << regex_replace(input, pat, format, regex_constants::format_no_copy);
 }
 
-// for string delimiter
+/**
+ * @brief split with string delimiter
+ * https://stackoverflow.com/a/46931770/5590919
+ */
 vector<string> split(string s, string delimiter)
 {
   size_t pos_start = 0, pos_end, delim_len = delimiter.length();
@@ -57,18 +68,30 @@ vector<string> split(string s, string delimiter)
   return res;
 }
 
-template <std::size_t... S, typename T>
-void unpack_vector(const vector<T> &vec, std::index_sequence<S...>)
+/**
+ * https://stackoverflow.com/questions/41980888/how-to-convert-from-stdvector-to-args
+ */
+
+template <std::size_t... S, typename K, typename V, typename T>
+void unpack_vector(map<K, V> &m, const vector<T> &vec, std::index_sequence<S...>)
 {
-  // test2(vec[S]...);
+  m.emplace(forward<decltype(vec[S])>(vec[S])...);
 }
 
-template <std::size_t size, typename T> void unpack_vector(const vector<T> &vec)
+/**
+ * @brief push_back new map pair from vector with size of 2(key, value pair)
+ * @tparam size length of vector must be two
+ * @param m target map
+ * @param vec source key-value pair vector
+ */
+const std::size_t Vec_size = 2;
+template <std::size_t size, typename K, typename V, typename T>
+void emplace_from_vec(map<K, V> &m, const vector<T> &vec)
 {
-  cout << vec.size() << endl;
   if (vec.size() != size)
-    throw new exception() /* choose your error */;
-  unpack_vector(vec, std::make_index_sequence<size>());
+    // throw; // ? should throw
+    return;
+  unpack_vector(m, vec, make_index_sequence<2>());
 }
 
 void use_replace_then_parse()
@@ -78,15 +101,11 @@ void use_replace_then_parse()
   string format{"$1,$2\n"};
   string out = regex_replace(input, pat, format, regex_constants::format_no_copy);
 
-  map<string, int> new_m;
+  map<string, string> new_m;
   for (auto x : split(out, "\n"))
-    unpack_vector<2>(split(x, ","));
-  // unpack_vector<2>(vector<string>{"a", "b"});
-  // cout << typeid(x).name() << endl;
-  // new_m.emplace_back(split(x, ",")...);
+    emplace_from_vec<Vec_size>(new_m, split(x, ","));
 
-  // for (auto m : new_m)
-  //   cout << m << endl;
+  cout << new_m;
 }
 
 int main()
