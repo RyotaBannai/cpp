@@ -857,7 +857,7 @@
       - e.g. 各行の形式が決めらているテーブルの集計(1064)
     - `regex_replace`: パターンを置換
   - `反復子`:
-    - `regex_iterator`: 文字シーケンスに含まれるパターンを探索しながら反復処理が可能. 
+    - `regex_iterator`: 文字シーケンスに含まれるパターンを探索しながら反復処理が可能.
       - `regex_iterator{}` は末尾を表すため、反復処理の終了条件は `p!=regex_iterator{}` とする(1068)
   - `()` group (部分パターン)化した文字列は matches コンテナから取得できる
     - 部分パターンではない `()` を定義したい場合(or をグループ化したい場合など`(a|b|c)`.)は `(?:` から始める(1056)
@@ -867,3 +867,18 @@
     - `match_results[n]`: n 番目にマッチした sub_match にアクセス
   - C++ はデフォルトで最長一致(`Max Munch 規則`)ある. `lazy` or `non-greedy` にしたいなら繰り返し表現の直後に `?` をつける(1053)
   - `regex_replace` と書式か指定子（`$1`, `$&` など） でマッチした内容を書式化できる.(1062)
+- `入出力ストリーム`:
+  - ストリームのモード(1077): app(ファイルの終端に追加), ate(ファイルオープン後にファイル終端に移動), binary, in(既存のファイルをオーバライド), out, trunc(ファイルをゼロに切り詰める) これらのモードは ios_base が提供(1089)
+  - `basic_istream` は `istream`, `istringstream` などの入力処理の詳細を定義するクラスの基底クラスになることを意図したもの(1081)
+  - `sentry クラス`が istream の実装の詳細である. このクラスは標準ライブラリやユーザ定義の入力処理に共通するコードを提供する(1082)
+  - `sstream`: string への入出力を行うストリーム. istringstream, ostringstream, stringstrea.
+    - 初期化後は `good() | eof()` で正常を意味する 1 を表し、問題があれば 0(1079, 1080)
+      - `fail()`は予期しない事態が発生したかどうか確認できる(`cin>int_val` に `'x'` を検出した場合など)(1080)
+      - これらの関数は ios_base のストリームの状態を表すメンバ iostate の定数値を読みとる関数である. (これらの関数も ios_base が提供)(1089)
+    - `stringstream(basic_stringstream<C, Tr, A>)`のデフォルトコンストラクタ `stringstream ss{} == stringstream ss{ios_base::out|ios_base::in}` (1078)
+    - `ss.rdbuf()`: ss の`文字列ストリームバッファ`を指す(`basic_stringbuf<C,Tr,A>`)
+    - `ss.str() == ss.rdbuf()->str()`: ss の文字列（string）のコピー
+      - `ss.str(s)`: ss のストリングバッファを s で初期化
+  - `操作子`:
+    - `cout<<pf`(== pf(cout)) のように関数へのポインタを << の第二引数に与えるとその関数が実行される
+    - `cout << estprecision(4) << angle;`: 浮動小数点数の変数 angle の値を 4 桁で出力(1087)
