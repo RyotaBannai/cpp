@@ -912,3 +912,7 @@
         - compare は C 言語スタイルの文字列ではないため(`[b:e)` の範囲で比較)、文字列の最後に 0 が入っている場合それは終端文字ではなく文字列の一部として扱われるので注意. (1130)
           - 直接 compare を呼び出さなくても、locale の () 演算子を利用すると述語(sort の引数としても利用可)として呼び出すとができる: `void f(string &s1, string &s2) { locale{}(s1, s2); // instead of, ({use_face<collate<char>>(locale{})).comppare(s1, s2); `(1120, 1130)
           - 例えば, german の ä は一般的な文字セットでは c よりも大きいが、a の一種として扱われるため c よりも前にくる必要がある. (1130)
+        - `*_byname`: collate_byname はプログラムの実行環境で名前が与えられた locale から collate を抽出できる.
+          facet をプログラムテキストとしておいた上で、 データを \_bynamefacet 特性に入れるという方法がある(1131)
+      - `numeric`:
+        - `num_put` `num_get` が入出力を制御し、これらは `numpunct(numerical punctuation)` facet によって定義される書式を利用する.(1131)
