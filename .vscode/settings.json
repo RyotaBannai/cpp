@@ -84,7 +84,9 @@
     "filesystem": "cpp",
     "__functional_base_03": "cpp",
     "unordered_set": "cpp",
-    "regex": "cpp"
+    "regex": "cpp",
+    "cerrno": "cpp",
+    "valarray": "cpp"
   },
   "C_Cpp.errorSquiggles": "Disabled",
   "C_Cpp.autocompleteAddParentheses": true,
