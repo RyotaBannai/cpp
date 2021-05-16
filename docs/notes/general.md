@@ -961,3 +961,13 @@
       - マスクに`valarray<bool>` よる演算結果の型が `mask_array` で、インデックスの集合`valarray<size_t>` による添字演算結果が `indirect_array` になる.(1171)
     - スライス: slice は `slice(size_t start, size_t size, size_t stride)` と表現される.
       - valarray は`行優先(row-major)`順序なので、行を表す slice は `slice(x*row_count, row_count, 1)` と表現できて、列は `slice(y*column_count, column_count, row_count)`と表現することができる. stride は２要素間の距離のことで、行であれば次の要素は１つ次なので１、列であれば次の要素へ移動するために row_count だけ進む必要があるため row_count となる(1175)
+  - 汎用数値アルゴリズム:
+    - `inner_product`: 2 個のシーケンスの加算処理(点乗算(dot product) と呼ばれることもある).
+      - Matrix と valarray での乗算で inner_product を利用する.
+        - Matrix の n 行と valarray を乗算するために、Matrix の行(nth_raw)をループで取り出して、
+          - opt(Matrix, valarray): `inner_product(nth_row, nth_row.end(), &val[0], double(0))`
+          - opt(valarray, Matrix): `inner_product(nth_column, nth_column.end(), &val[0], double(0))`
+        - valarray は先頭要素への参照だけ、double(0) は初期値.(1180)
+    - `adjacent_difference`: 漸進的進化の処理に使用. `17, 19, 20, 20, 17` -> `17, 2, 1, 0, -3`
+      - 例: 気温の前回値と今回値の差分を時系列に処理する.
+    - `partial_sum`: 漸進的進化の処理に使用. `17, 2, 1, 0, -3` -> `17, 19, 20, 20, 17`
