@@ -1,17 +1,13 @@
-#include <string>
-#include <thread>   // std::thread
-#include <iostream> // std::out
-#include <vector>
 #include <functional>
+#include <iostream> // std::out
+#include <string>
+#include <thread> // std::thread
+#include <vector>
 using namespace std;
 
-void f(int x)
-{
-  cout << "Good, you?\n";
-};
+void f(int x) { cout << "Good, you?\n"; };
 
-class F
-{
+class F {
 private:
   vector<double> &v;
 
