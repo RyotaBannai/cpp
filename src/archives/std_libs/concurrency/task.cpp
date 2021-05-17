@@ -1,3 +1,4 @@
+#include <chrono>
 #include <functional>
 #include <iostream> // std::out
 #include <string>
@@ -5,7 +6,11 @@
 #include <vector>
 using namespace std;
 
-void f(int x) { cout << "Good, you?\n"; };
+void f(int x)
+{
+  this_thread::sleep_for(chrono::seconds(1));
+  cout << "Good, you?\n";
+};
 
 class F {
 private:
